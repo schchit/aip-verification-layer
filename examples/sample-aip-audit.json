@@ -1,6 +1,5 @@
 {
-  "_comment": "AIP v1alpha3 Native Audit Log - HJS Mapping Example",
-  "_hjs_analysis": "Success: Delegation and Judgment verified via native AIP fields.",
+  "_comment": "AIP v1alpha3 Native Audit Log - Target for Verification",
   "timestamp": "2026-02-27T10:30:45.123Z",
   "direction": "upstream",
   "method": "tools/call",
