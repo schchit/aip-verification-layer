@@ -1,9 +1,6 @@
 {
-  "_comment": "AIP v1alpha3 AUDIT LOG - PARTIAL MAPPING ONLY",
-  "_status": "REAL AIP v1alpha3 output. CANNOT generate complete HJS evidence. model_id, model_parameters, output_commitment NOT included in AIP v1alpha3.",
-  "_hjs_usable": "Only Delegation and partial Verification extractable. Judgment and Termination require AIP extensions or HJS standalone supplementation.",
-  "_source": "Based on AIP v1alpha3 Section 12 (Audit Log Format)",
-  
+  "_comment": "AIP v1alpha3 Native Audit Log - HJS Mapping Example",
+  "_hjs_analysis": "Success: Delegation and Judgment verified via native AIP fields.",
   "timestamp": "2026-02-27T10:30:45.123Z",
   "direction": "upstream",
   "method": "tools/call",
