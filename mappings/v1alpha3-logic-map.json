@@ -6,39 +6,39 @@
         "step": 1,
         "action": "AIP v1alpha3 native log mapping",
         "status": "COMPLETED",
-        "notes": "HJS now fully consumes standard AIP logs"
+        "notes": "Verification layer now consumes standard AIP v1alpha3 logs."
       },
       {
         "step": 2,
-        "action": "AIP-to-HJS Light Bridge (aip2hjs.py)",
-        "status": "IN_PROGRESS",
-        "notes": "Developing non-invasive Python connector"
+        "action": "Lightweight Logic Bridge (analyzer.py)",
+        "status": "COMPLETED",
+        "notes": "Non-invasive Python tool for log analysis is ready."
       },
       {
         "step": 3,
-        "action": "Joint testing with gaslight",
+        "action": "Integration testing with Gaslight",
         "status": "READY",
-        "notes": "Awaiting integration with James's testing suite"
+        "notes": "Waiting to validate against James's testing scenarios."
       }
     ]
   },
   "collaboration_roadmap": {
-    "repository": "https://github.com/schchit/hjs-aip-integration",
-    "focus_area": "Enhancing audit visibility for AIP users via HJS logic plugins",
+    "repository": "https://github.com/schchit/aip-verification-layer",
+    "focus_area": "Providing structured audit visibility for AIP implementations.",
     "next_steps": [
-      "Finalize aip2hjs.py prototype for v1alpha3",
-      "Demonstrate structured judgments in gaslight scenarios",
-      "Document best practices for verifiable AI auditing"
+      "Refine the logic bridge for complex multi-tool scenarios.",
+      "Demonstrate verifiable judgments in gaslight attack simulations.",
+      "Contribute audit best practices to the Agent2Agent Working Group."
     ]
   },
   "community_alignment": {
-    "partner": "James (AIP maintainer)",
-    "context": "IETF Standards Working Group / GitHub Discussion #14",
-    "shared_goal": "To provide AIP users with a seamless, high-integrity evidence layer",
-    "status": "Active dialogue on lightweight verification"
+    "maintainer_context": "James (yungcero / AIP)",
+    "forum": "IETF Standards Working Group / GitHub Discussion #14",
+    "vision": "A seamless, high-integrity verification layer for the AIP ecosystem.",
+    "status": "Continuous alignment with v1alpha3 specifications."
   },
   "future_outlook": {
-    "for_integrators": "AIP v1alpha3 provides a solid identity foundation; HJS adds an optional logic-verification layer.",
-    "long_term": "As AIP evolves, HJS will continuously adapt to provide the most robust evidence support possible."
+    "for_integrators": "AIP v1alpha3 provides the identity foundation; this layer adds pluggable verification logic.",
+    "long_term": "Continuous adaptation to support future AIP evolutions and cryptographic auditing."
   }
 }
