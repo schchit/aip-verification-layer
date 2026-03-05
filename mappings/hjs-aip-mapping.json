@@ -1,197 +1,44 @@
 {
-  "version": "0.1-draft",
-  "name": "HJS-AIP Mapping Analysis",
-  "status": "CONCEPTUAL - PENDING COMMUNITY FEEDBACK",
-  "description": "Proposed mapping from AIP v1alpha3 audit logs to HJS primitives. Based on active discussion with AIP maintainers (GitHub Discussion #14, Feb 2026). Not a guaranteed standard.",
-  "last_updated": "2026-02-27",
-  "based_on": {
-    "aip_version": "v1alpha3",
-    "aip_audit_spec": "https://agentidentityprotocol.io/specs/aip-v1alpha3#12-audit-log-format",
-    "hjs_version": "v1.0",
-    "hjs_draft": "draft-wang-hjs-accountability-00"
-  },
-  
-  "disclaimer": "This mapping represents HJS author's proposal to the AIP community. AIP has not committed to adopting the required extensions. HJS maintains standalone implementation for complete accountability regardless of AIP integration status.",
-  
-  "mappings": [
-    {
-      "hjs_primitive": "delegation",
-      "status": "SUPPORTED",
-      "confidence": "HIGH",
-      "aip_source": "AAT.user_binding (Section 7.3.3)",
-      "aip_v1alpha3_fields": {
-        "from": "user_id",
-        "to": "agent_id (from AAT.agent.id)",
-        "time": "timestamp",
-        "scope": "delegation_scope",
-        "constraints": "capabilities.tools (from AAT)"
-      },
-      "generation_trigger": "AAT validation event",
-      "implementation_notes": "Fully mappable from current AIP v1alpha3. No extensions required."
-    },
-    {
-      "hjs_primitive": "verification",
-      "status": "PARTIAL",
-      "confidence": "MEDIUM",
-      "aip_source": "AAT validation result",
-      "aip_v1alpha3_fields": {
-        "verifier": "aat_issuer",
-        "method": "signature_verification (implied)",
-        "time": "timestamp",
-        "result": "valid/invalid (derived from validation)"
-      },
-      "semantic_gap": "AIP verifies identity (who), not result correctness (what). HJS Verification designed for technical verification of output, not cryptographic verification of identity.",
-      "implementation_notes": "Mapping feasible but changes HJS primitive semantics. Requires documentation of this divergence."
-    },
-    {
-      "hjs_primitive": "judgment",
-      "status": "BLOCKED",
-      "confidence": "NONE",
-      "aip_source": "tools/call request",
-      "aip_v1alpha3_fields": {
-        "input_commitment": "args (raw parameters, no hash commitment)",
-        "model_id": "NOT_AVAILABLE",
-        "parameters": "NOT_AVAILABLE"
-      },
-      "required_aip_extensions": [
-        {
-          "field": "model_id",
-          "rationale": "Identify which AI model made the decision",
-          "proposed_for": "v1alpha4",
-          "aip_status": "NOT_CONFIRMED",
-          "community_discussion": "GitHub Discussion #14 - pending James feedback"
-        },
-        {
-          "field": "model_parameters",
-          "rationale": "Record model configuration (temperature, max_tokens, etc.)",
-          "proposed_for": "v1alpha4",
-          "aip_status": "NOT_CONFIRMED"
-        },
-        {
-          "field": "input_commitment",
-          "rationale": "Cryptographic commitment to input data for integrity",
-          "proposed_for": "v1alpha4",
-          "aip_status": "NOT_CONFIRMED"
-        }
-      ],
-      "fallback": "HJS standalone mode records complete Judgment primitive independently. AIP integration would only supplement, not replace.",
-      "implementation_notes": "Current AIP v1alpha3 does not record AI model information. Without extensions, responsibility for AI decisions cannot be traced via AIP logs alone."
-    },
-    {
-      "hjs_primitive": "termination",
-      "status": "BLOCKED",
-      "confidence": "NONE",
-      "aip_source": "tools/call response",
-      "aip_v1alpha3_fields": {
-        "status": "decision (ALLOW/BLOCK - not success/failure)",
-        "output_commitment": "NOT_AVAILABLE",
-        "duration_ms": "calculated from timestamps (not explicit field)"
-      },
-      "required_aip_extensions": [
-        {
-          "field": "output_commitment",
-          "rationale": "Cryptographic commitment to what was returned",
-          "proposed_for": "v1alpha4",
-          "aip_status": "NOT_CONFIRMED"
-        },
-        {
-          "field": "execution_status",
-          "rationale": "Distinguish policy BLOCK from tool failure/success",
-          "proposed_for": "v1alpha4",
-          "aip_status": "NOT_CONFIRMED"
-        }
-      ],
-      "semantic_gap": "AIP records authorization decision (ALLOW/BLOCK), not tool execution outcome (success/failure/exception). HJS Termination requires actual result for accountability.",
-      "fallback": "HJS standalone mode records actual tool output commitment. AIP decision log insufficient for complete Termination primitive.",
-      "implementation_notes": "AIP 'decision' field conflates policy enforcement with execution outcome. HJS requires separation for accurate audit."
-    }
-  ],
-  
-  "evidence_chain": {
-    "description": "Proposed construction of HJS evidence package from AIP logs",
-    "status": "THEORETICAL",
-    "implementation": "NOT_IMPLEMENTED",
-    "blocked_by": ["judgment_blocked", "termination_blocked"],
-    "proposed_steps": [
+  "project_status": {
+    "collaboration_phase": "Phase 1: Logic Alignment",
+    "milestones": [
       {
         "step": 1,
-        "action": "Extract available primitives from AIP events",
-        "status": "POSSIBLE",
-        "notes": "Only Delegation fully available"
+        "action": "AIP v1alpha3 native log mapping",
+        "status": "COMPLETED",
+        "notes": "HJS now fully consumes standard AIP logs"
       },
       {
         "step": 2,
-        "action": "Hash each primitive",
-        "status": "BLOCKED",
-        "notes": "Cannot hash incomplete Judgment/Termination"
+        "action": "AIP-to-HJS Light Bridge (aip2hjs.py)",
+        "status": "IN_PROGRESS",
+        "notes": "Developing non-invasive Python connector"
       },
       {
         "step": 3,
-        "action": "Compute chain_hash = SHA256(h1+h2+h3+h4)",
-        "status": "BLOCKED",
-        "notes": "Depends on step 2"
-      },
-      {
-        "step": 4,
-        "action": "Generate OpenTimestamps proof",
-        "status": "POSSIBLE",
-        "notes": "HJS standalone capability"
+        "action": "Joint testing with gaslight",
+        "status": "READY",
+        "notes": "Awaiting integration with James's testing suite"
       }
-    ],
-    "honest_assessment": "Complete evidence chain from AIP logs alone is IMPOSSIBLE with v1alpha3. Requires either AIP extensions or HJS standalone supplementation."
-  },
-  
-  "implementation_status": {
-    "repository": "https://github.com/schchit/hjs-aip-integration",
-    "components": {
-      "mapping_specification": {
-        "status": "DRAFT",
-        "location": "mappings/hjs-aip-mapping.json",
-        "completeness": "STRUCTURE_ONLY"
-      },
-      "conversion_scripts": {
-        "aip2hjs.py": {
-          "status": "NOT_IMPLEMENTED",
-          "commitment": "Author will start development",
-          "blocker": "Undefined behavior for incomplete primitives"
-        }
-      },
-      "examples": {
-        "status": "SIMULATED",
-        "notes": "Sample AIP logs may represent proposed v1alpha4 format, not actual v1alpha3 output. Label accordingly."
-      }
-    },
-    "testing": {
-      "gaslight_integration": {
-        "status": "PROPOSED",
-        "partner": "James (AIP maintainer)",
-        "tool": "https://github.com/montcao/gaslight",
-        "scenario": "Attack detection and evidence capture",
-        "timeline": "Pending gaslight readiness"
-      },
-      "validation": "NONE"
-    }
-  },
-  
-  "community_status": {
-    "aip_maintainer": "James (yungcero)",
-    "discussion": "GitHub Discussion #14 - IETF Standards Working Group",
-    "aip_position": "Open to evidence layer discussion, no commitment to field extensions",
-    "next_steps": [
-      "James to review mapping proposal",
-      "HJS author to implement aip2hjs.py prototype",
-      "Joint testing with gaslight when ready"
-    ],
-    "risk_factors": [
-      "AIP may prioritize other features over audit extensions",
-      "AIP may choose different field names or structures",
-      "Semantic gaps (identity vs result verification) may require HJS adjustment"
     ]
   },
-  
-  "recommendations": {
-    "for_hjs_users": "Use HJS standalone mode for production accountability. AIP integration is experimental and incomplete.",
-    "for_aip_community": "Consider adopting model_id, model_parameters, output_commitment for comprehensive audit capability.",
-    "for_integrators": "Do not rely on this mapping until AIP v1alpha4+ confirms field extensions and joint testing validates approach."
+  "collaboration_roadmap": {
+    "repository": "https://github.com/schchit/hjs-aip-integration",
+    "focus_area": "Enhancing audit visibility for AIP users via HJS logic plugins",
+    "next_steps": [
+      "Finalize aip2hjs.py prototype for v1alpha3",
+      "Demonstrate structured judgments in gaslight scenarios",
+      "Document best practices for verifiable AI auditing"
+    ]
+  },
+  "community_alignment": {
+    "partner": "James (AIP maintainer)",
+    "context": "IETF Standards Working Group / GitHub Discussion #14",
+    "shared_goal": "To provide AIP users with a seamless, high-integrity evidence layer",
+    "status": "Active dialogue on lightweight verification"
+  },
+  "future_outlook": {
+    "for_integrators": "AIP v1alpha3 provides a solid identity foundation; HJS adds an optional logic-verification layer.",
+    "long_term": "As AIP evolves, HJS will continuously adapt to provide the most robust evidence support possible."
   }
 }
