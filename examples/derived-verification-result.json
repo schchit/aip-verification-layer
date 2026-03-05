@@ -1,8 +1,8 @@
 {
-  "_comment": "HJS AUXILIARY EVIDENCE - NATIVE ADAPTATION",
-  "_status": "Derived from AIP v1alpha3 native audit logs. Showing structured logic without schema extensions.",
-  "hjs_version": "1.0",
-  "evidence_id": "hjs_ev_550e8400-e29b-41d4-a716-446655440000",
+  "_comment": "AIP v1alpha3 Derived Verification Evidence",
+  "_status": "Successfully derived from native audit logs. No schema extensions required.",
+  "verifier_version": "1.0-aip-adapter",
+  "evidence_id": "ev_550e8400-e29b-41d4-a716-446655440000",
   "generated_at": "2026-02-27T10:30:45.500Z",
   "primitives": {
     "delegation": {
@@ -12,32 +12,30 @@
       "time": 1740654645123,
       "scope": "tools",
       "constraints": {
-        "allowed_tools": ["read_file"],
-        "delegation_scope": "tools"
+        "allowed_tools": ["read_file"]
       }
     },
     "judgment": {
       "source": "AIP Policy Engine",
       "type": "logic_inference",
       "verdict": "AUTHORIZED",
-      "reason": "Aligned with AIP policy_hash",
+      "reason": "Aligned with native AIP policy_hash",
       "policy_ref": "a3c7f2e8d9b4f1e2c8a7d6f3e9b2c4f1a8e7d3c2b5f4e9a7c3d8f2b6e1a9c4f7"
     },
     "verification": {
       "source": "AIP Issuer",
       "method": "AAT_signature_verification",
       "verifier": "https://issuer.aip.example.com",
-      "result": "valid",
-      "time": 1740654645123
+      "result": "valid"
     },
     "termination": {
-      "source": "AIP Audit Record",
+      "source": "AIP Audit Stream",
       "event": "session_active",
       "status": "active_monitored"
     }
   },
   "summary": {
-    "integrity": "AIP-Standard",
-    "status": "Verified by HJS Auxiliary Logic"
+    "integrity": "AIP-Standard-Compliant",
+    "status": "Verified via Auxiliary Logic Layer"
   }
 }
